@@ -32,7 +32,7 @@ Welcome to HyprDots – a polished, feature-rich dotfiles for Arch Linux and Hyp
 1. **Run install.sh**:
 
 ```bash
-bash <(wget -qO- https://raw.githubusercontent.com/sbalghari/HyprDots/main/install.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/GriefNorth/HyprDots/main/install.sh)
 ```
 
 2. **Follow the installer's instructions**:
