@@ -1,3 +1,4 @@
+from logging import fatal
 from includes.logger import logger, log_heading
 from includes.paths import USER_CONFIGS_DIR, USER_DOTFILES_DIR, HYPRDOTS_DOTFILES_DIR
 from includes.library import remove, create_symlink, path_lexists, copy
@@ -26,6 +27,7 @@ class DotfilesInstaller:
             "btop",
             "wlogout",
             "atuin",
+            "tmux",
             "starship.toml",
         ]
 
@@ -56,12 +58,50 @@ class DotfilesInstaller:
             # Step 5: Link the new Dotfiles
             if not self._create_links(spinner):
                 return False
-            
+
             sleep(1)
             spinner.success("Dotfiles installed successfully!")
 
+        with Spinner("Installing TPM Plugin manager...") as spinner:
+            if not self._install_tpm(spinner):
+                return False
+
         print()
         return True
+
+    def _install_tpm(self, spinner) -> bool:
+        """Install Tmux Plugin Manager"""
+        logger.info("Installing TPM (Tmux Plugin Manager)")
+        spinner.update_text("Installing TPM for tmux...")
+
+        if self.dry_run:
+            sleep(2)
+            return True
+
+        tpm_dir = USER_DOTFILES_DIR / "tmux" / "plugins" / "tpm"
+
+        # Remove existing TPM if exists
+        if tpm_dir.exists():
+            remove(tpm_dir)
+
+        # Clone TPM repository
+        try:
+            run_command(
+                [
+                    "git",
+                    "clone",
+                    "https://github.com/tmux-plugins/tpm.git",
+                    str(tpm_dir),
+                ],
+                check=True,
+                capture_output=True,
+            )
+            logger.info("TPM installed successfully")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to install TPM: {e}")
+            spinner.error("Failed to install TPM for tmux")
+            return False
 
     def _validate_sources(self, spinner) -> bool:
         logger.info("Validating source dotfiles components.")
