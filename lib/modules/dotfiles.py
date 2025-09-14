@@ -62,12 +62,64 @@ class DotfilesInstaller:
             sleep(1)
             spinner.success("Dotfiles installed successfully!")
 
-        with Spinner("Installing TPM Plugin manager...") as spinner:
+        with Spinner("Installing third-party dots...") as spinner:
             if not self._install_tpm(spinner):
+                return False
+            if not self._install_lazyvim(spinner):
                 return False
 
         print()
         return True
+
+    def _install_lazyvim(self, spinner) -> bool:
+        """Install LazyVim"""
+        logger.info("Installing LazyVim")
+        spinner.update_text("Installing LazyVim...")
+
+        if self.dry_run:
+            sleep(2)
+            return True
+
+        lazyvim_dir = USER_DOTFILES_DIR / "nvim"
+
+        # Remove existing nvim config if exists
+        if lazyvim_dir.exists():
+            remove(lazyvim_dir)
+
+        # Backup existing nvim config if it exists
+        nvim_config_dir = USER_CONFIGS_DIR / "nvim"
+        if nvim_config_dir.exists():
+            backup_dir = USER_CONFIGS_DIR / "nvim.backup"
+            if backup_dir.exists():
+                remove(backup_dir)
+            nvim_config_dir.rename(backup_dir)
+            logger.info(f"Backed up existing nvim config to {backup_dir}")
+
+        # Clone LazyVim starter template
+        try:
+            run_command(
+                [
+                    "git",
+                    "clone",
+                    "--filter=blob:none",
+                    "https://github.com/LazyVim/starter.git",
+                    str(lazyvim_dir),
+                ],
+                check=True,
+                capture_output=True,
+            )
+
+            # Remove .git directory to avoid conflicts
+            git_dir = lazyvim_dir / ".git"
+            if git_dir.exists():
+                remove(git_dir)
+
+            logger.info("LazyVim installed successfully")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to install LazyVim: {e}")
+            spinner.error("Failed to install LazyVim")
+            return False
 
     def _install_tpm(self, spinner) -> bool:
         """Install Tmux Plugin Manager"""
