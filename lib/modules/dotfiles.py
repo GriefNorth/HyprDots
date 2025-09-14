@@ -28,6 +28,7 @@ class DotfilesInstaller:
             "wlogout",
             "atuin",
             "tmux",
+            "nvim",
             "starship.toml",
         ]
 
