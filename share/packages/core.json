@@ -29,5 +29,7 @@
   "neovim",
   "starship",
   "swaync",
-  "swww"
+  "swww",
+  "bat",
+  "tmux"
 ]
