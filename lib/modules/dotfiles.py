@@ -101,8 +101,7 @@ class DotfilesInstaller:
                 [
                     "git",
                     "clone",
-                    "--filter=blob:none",
-                    "https://github.com/LazyVim/starter.git",
+                    "https://github.com/LazyVim/starter",
                     str(lazyvim_dir),
                 ],
                 check=True,
