@@ -5,9 +5,6 @@
 # Remove the fish greetings
 set -g fish_greeting
 
-# Start neofetch
-neofetch
-
 # Sets starship as the promt
 eval (starship init fish)
 
