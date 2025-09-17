@@ -5,6 +5,9 @@
 # Remove the fish greetings
 set -g fish_greeting
 
+# Start tmux
+tmux
+
 # Sets starship as the promt
 eval (starship init fish)
 
