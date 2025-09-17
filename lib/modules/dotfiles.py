@@ -30,6 +30,7 @@ class DotfilesInstaller:
             "tmux",
             "nvim",
             "starship.toml",
+            "lazygit",
         ]
 
         self.source_dotfiles_components_paths = [
