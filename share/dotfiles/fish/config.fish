@@ -6,7 +6,7 @@
 set -g fish_greeting
 
 # Start tmux
-tmux
+tmux list-sessions 2>/dev/null && tmux attach 2>/dev/null || tmux new
 
 # Sets starship as the promt
 eval (starship init fish)
